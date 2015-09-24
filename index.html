@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Example Backbone App</title>
+  <!-- load the bootstrap stylesheet -->
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" media="all" rel="stylesheet" type="text/css" />
+  <!-- load the libraries we need -->
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.3/zepto.min.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+  <!-- load our scripts -->
+  <script type="text/javascript" src="js/note_router.js"></script>
+  <script type="text/javascript" src="js/models/note_model.js"></script>
+  <script type="text/javascript" src="js/views/note_index.js"></script>
+  <script type="text/javascript" src="js/views/note_row.js"></script>
+  <script type="text/javascript" src="js/views/note_new.js"></script>
+  <script type="text/javascript" src="js/views/note_edit.js"></script>
+  <script type="text/javascript" src="js/views/note_show.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>Contact Form</h1>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6" id="primary-content">
+        <!-- the container that gets populated with the index -->
+      </div>
+    </div>
+  </div>
+
+  <!-- the form, used for create and edit -->
+  <script type="text/jst" id="formTemplate">
+    <div class="well">
+      <div class="alert alert-danger fade in" style="display:none;"></div>
+      <form>
+        <h2><%= name %></h2>
+        <div class="form-group">
+          <label>Name:</label>
+          <input type="text" class="form-control" name="name" value="<%= name %>" />
+        </div>
+        <div class="form-group">
+          <label>Phone Number:</label>
+          <input type="number" class="form-control" name="phone" value="<%= phone %>" />
+        </div>
+        <div class="form-group">
+          <label>Address:</label>
+          <textarea class="form-control" rows="5" name="address"><%= address %></textarea>
+        </div>
+        <button class="save btn btn-large btn-info" type="submit">Save</button>
+        <a href="#notes/index" class="btn btn-large">Cancel</a>
+      </form>
+    </div>
+  </script>
+
+  <!-- the index container -->
+  <script type="text/template" id="indexTemplate">
+    <div class="well">
+      <a class="btn btn-block btn-large btn-info" href="#note/new">Create Your Contact</a>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th width="30%">Name</th>
+          <th width="30%">Phone Number</th>
+          <th>Address</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </script>
+
+  <!-- the row template, renders once for each item in the index -->
+  <script type="text/template" id="rowTemplate">
+    <td>
+        <a href="#note/<%= id %>/view"><%= name %></a>
+    </td>
+    <td><%= phone %></td>
+    <td><% print(address.substring(0, 100)) %>...</td>
+    <td>
+      <a href="#" class="delete btn btn-danger btn-small">delete</a>
+    </td>
+  </script>
+
+  <!-- the show template -->
+  <script type="text/template" id="showTemplate">
+    <ol class="breadcrumb">
+      <li>
+        <a href="#notes/index">All Notes</a>
+      </li>
+      <li class="active">View Note</li>
+    </ol>
+
+    <h2>
+      <%= name %>
+      <small>contact through: <%= phone %></small>
+    </h2>
+    <h2><small>and resident at</small></h2>
+    <p style="white-space:pre-wrap;"> <%= address %></p>
+    <hr/>
+    <a class="btn btn-info btn-block" href="#note/<%= id %>/edit">Edit Note</a>
+  </script>
+
+  <!-- kick off the app -->
+  <script type="text/javascript">
+    var router = new APP.NoteRouter({
+      notes: new APP.NoteCollection()
+    });
+
+    // now that everyting is setup we tell backbone to watch the urls
+    Backbone.history.start();
+  </script>
+</body>
+</html>
